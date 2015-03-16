@@ -2,7 +2,7 @@
 
 describe('Controller: HomeCtrl', function () {
 
-  beforeEach(module('midifyWeb'));
+  beforeEach(module('Midify'));
 
   var HomeCtrl,
     scope;

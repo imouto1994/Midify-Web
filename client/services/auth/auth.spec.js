@@ -2,7 +2,7 @@
 
 describe('Service: Auth', function () {
 
-  beforeEach(module('midifyWeb'));
+  beforeEach(module('Midify'));
 
   var Auth,
     $httpBackend,

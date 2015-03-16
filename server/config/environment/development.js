@@ -2,6 +2,6 @@
 
 module.exports = {
   mongo: {
-    uri: 'mongodb://localhost/midifyweb-dev'
+    uri: 'mongodb://localhost/Midify-dev'
   }
 };

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('midifyWeb')
+angular.module('Midify')
   .directive('navBar', function () {
     return {
       restrict: 'E',

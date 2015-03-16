@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('midifyWeb')
+angular.module('Midify')
   .service('Auth', function ($rootScope, $cookieStore, $q, $http) {
 
     var _user = {};

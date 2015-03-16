@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('midifyWeb')
+angular.module('Midify')
   .controller('HomeCtrl', function () {
 
     var vm = this;

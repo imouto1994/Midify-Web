@@ -2,7 +2,7 @@
 
 describe('Controller: SignupCtrl', function () {
 
-  beforeEach(module('midifyWeb'));
+  beforeEach(module('Midify'));
 
   var SignupCtrl;
 

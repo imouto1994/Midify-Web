@@ -2,7 +2,7 @@
 
 describe('Controller: LoginCtrl', function () {
 
-  beforeEach(module('midifyWeb'));
+  beforeEach(module('Midify'));
 
   var LoginCtrl,
     $httpBackend,

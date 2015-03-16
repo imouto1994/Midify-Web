@@ -49,7 +49,7 @@ function log (msg, options) {
 }
 
 /**
- * Compile sass
+ * Compile SASS
  */
 gulp.task('sass', function () {
   return gulp.src('client/styles/app.scss')
@@ -312,13 +312,13 @@ gulp.task('scripts', function () {
   var views = gulp.src('client/views/**/*.html')
     .pipe($.angularTemplatecache({
       root: 'views',
-      module: 'midifyWeb'
+      module: 'Midify'
     }));
 
   var tpls = gulp.src('client/directives/**/*.html')
     .pipe($.angularTemplatecache({
       root: 'directives',
-      module: 'midifyWeb'
+      module: 'Midify'
     }));
 
   var app = gulp.src('dist/client/app.js');
@@ -350,6 +350,9 @@ gulp.task('rev', function () {
     .pipe(gulp.dest('dist/client/'));
 });
 
+/**
+ *  Build task
+ */
 gulp.task('build', function (cb) {
   runSequence(
     ['clean:dist', 'sass'],
@@ -361,7 +364,7 @@ gulp.task('build', function (cb) {
 });
 
 /**
- * Git versioning and bump
+ * Git Versioning and Git Bump New Updates to Repo
  */
 
 gulp.task('version', function () {

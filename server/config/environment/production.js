@@ -3,6 +3,6 @@
 module.exports = {
   ip: process.env.IP || undefined,
   mongo: {
-    uri: 'mongodb://localhost/midifyweb'
+    uri: 'mongodb://localhost/Midify'
   }
 };

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('midifyWeb')
+angular.module('Midify')
   .factory('Socket', function (socketFactory) {
 
     var ioSocket = io('', {

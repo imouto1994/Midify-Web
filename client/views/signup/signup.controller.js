@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('midifyWeb')
+angular.module('Midify')
   .controller('SignupCtrl', function ($location, Auth) {
 
     var vm = this;

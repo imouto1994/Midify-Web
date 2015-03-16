@@ -2,7 +2,7 @@
 
 describe('Directive: nav-bar', function () {
 
-  beforeEach(module('midifyWeb', 'templates'));
+  beforeEach(module('Midify', 'templates'));
 
   var element, scope;
 

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('midifyWeb')
+angular.module('Midify')
   .config(function ($routeProvider) {
     $routeProvider
       .when('/login', {
