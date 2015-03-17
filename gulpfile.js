@@ -1,6 +1,7 @@
 'use strict';
 
 var gulp = require('gulp');
+var exec = require('child_process').exec;
 var del = require('del');
 var chalk = require('chalk');
 var bowerFiles = require('main-bower-files');
@@ -47,6 +48,25 @@ function log (msg, options) {
     + (options.padding ? '\n' : '')
   );
 }
+
+/**
+ * Run a specific command
+ * 
+ * @param  {String} command 
+ */
+function runCommand (command) {
+  return function(callback) {
+    exec(command, function (err, stdout, stderr) {
+      console.log(stdout);
+      console.log(stderr);
+      cb(err);
+    });
+  }
+}
+
+/* MongoDB task */
+gulp.task('mongo-start', runCommand('mongod --dbpath ./db'));
+gulp.task('mongo-stop', runCommand('mongo localhost/Midify-dev --eval "db.shutdownServer()"'));
 
 /**
  * Compile SASS
@@ -243,7 +263,11 @@ function waitForExpress (cb) {
 /**
  * Launch server
  */
-gulp.task('serve', ['watch'], function () {
+gulp.task('clean:db', function (cb) {
+  del(['db/**', '!db'], cb);
+});
+
+gulp.task('serve', ['watch', 'clean:db'], function () {
   return $.nodemon({
       script: 'server/server.js',
       ext: 'js',
