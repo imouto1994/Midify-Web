@@ -1,0 +1,23 @@
+.home-content {
+  color: #fff;
+  text-align: center;
+  
+  .home-title {
+    @extend .font-quicksand;
+    font-size: 4em;
+    font-weight: 400;
+    margin-top: 2em;
+    margin-bottom: 0.5em;
+  }
+
+  .home-description {
+    @extend .font-quicksand;
+    font-size: 1.5em;
+    margin-bottom: 3em;
+  }
+
+  .md-button {
+    min-width: 13em;
+    line-height: 2.5em;
+  }
+}

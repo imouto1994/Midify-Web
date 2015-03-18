@@ -27,7 +27,7 @@ module.exports = function (app) {
   var env = config.env;
 
   app.set('view engine', 'html');
-  app.use(favicon(path.join(config.root, 'client', 'assets', 'favicon.ico')));
+  app.use(favicon(path.join(config.root, 'client', 'assets', 'images', 'favicon.png')));
   app.use(morgan('dev'));
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());

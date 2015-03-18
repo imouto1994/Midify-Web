@@ -1,3 +1,18 @@
+// Import css
+@import 'font-family';
+@import 'nav-bar';
+@import 'home';
+
+html, body {
+  height: 100%;
+
+  & > md-content {
+    height: calc(100% - 64px);
+    background: url('../../assets/images/bg.jpg');
+    background-size: cover;
+  }
+}
+
 body {
-  font-family: sans-serif;
+  @extend .font-roboto;
 }

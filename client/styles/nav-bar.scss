@@ -1,0 +1,23 @@
+.nav-bar {
+  .nav-logo {
+    max-height: 65%;
+  }
+
+  .md-button {
+    min-width: 6em;
+  }
+}
+
+.authentication-dialog {
+  min-width: 240px;
+  max-width: 80%;
+  max-height: 80%;
+
+  md-content {
+    padding: 24px;
+
+    md-input-container {
+      min-width: 280px;
+    }
+  }
+}

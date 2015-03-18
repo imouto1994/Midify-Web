@@ -11,9 +11,9 @@
     <meta name="viewport" content="width=device-width">
     
     <!-- Fav Icon -->
-    <link rel="image_src" href="assets/favicon.ico" type="image/x-icon">
-    <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
-    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+    <link rel="image_src" href="assets/images/favicon.png" type="image/png">
+    <link rel="shortcut icon" href="assets/images/favicon.png" type="image/png">
+    <link rel="icon" href="assets/images/favicon.png" type="image/png">
 
     <!-- Title -->
     <title>Midify</title>
@@ -32,12 +32,15 @@
 
   </head>
   <body>
-
-    <strong>Midify</strong>
-
+    <!-- Navigation Bar -->
     <nav-bar></nav-bar>
-
-    <div ng-view></div>
+    
+    <!-- Main Content -->
+    <md-content>
+        <div ng-view>
+        <!-- Routing Views -->  
+        </div>
+    </md-content>
 
     <script src="socket.io/socket.io.js"></script>
 

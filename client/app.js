@@ -1,22 +1,35 @@
 'use strict';
 
-angular.module('Midify', [
-  'ngRoute',
-  'ngCookies',
-  'btford.socket-io'
-])
-  .config(function ($routeProvider, $locationProvider, $httpProvider) {
+var app = angular.module('Midify', ['ngRoute', 'ngCookies', 'ngMaterial', 'btford.socket-io']);
 
-    $routeProvider
-      .otherwise({
-        redirectTo: '/'
-      });
+app.config(function ($routeProvider, $locationProvider, $httpProvider) {
+  $routeProvider
+    .otherwise({
+      redirectTo: '/'
+    });
 
-    $locationProvider.html5Mode(true);
-    $httpProvider.interceptors.push('authInterceptor');
+  $locationProvider.html5Mode(true);
+  $httpProvider.interceptors.push('authInterceptor');
+});
 
+// Material Color Configuration
+app.config(function ($mdThemingProvider) {
+  var defaultTheme = $mdThemingProvider.theme('default');
+
+  // Primary Scheme
+  defaultTheme.primaryPalette('red', {
+    'default': '500',
+    'hue-1': 'A200',
+    'hue-2': 'A400',
+    'hue-3': '200'
   })
-  .factory('authInterceptor',
+
+  // Accent Scheme
+
+  // Warn Scheme 
+});
+
+app.factory('authInterceptor',
   function ($rootScope, $q, $cookieStore, $location) {
     return {
 
@@ -40,10 +53,9 @@ angular.module('Midify', [
       }
 
     };
-  })
+  }
+)
 
-  .run(function ($rootScope, Auth) {
-
-    $rootScope.Auth = Auth;
-
-  });
+app.run(function ($rootScope, Auth) {
+  $rootScope.Auth = Auth;
+});

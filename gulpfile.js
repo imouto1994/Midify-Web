@@ -267,7 +267,7 @@ gulp.task('clean:db', function (cb) {
   del(['db/**', '!db'], cb);
 });
 
-gulp.task('serve', ['watch', 'clean:db'], function () {
+gulp.task('serve', ['watch'], function () {
   return $.nodemon({
       script: 'server/server.js',
       ext: 'js',
