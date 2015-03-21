@@ -64,10 +64,6 @@ function runCommand (command) {
   }
 }
 
-/* MongoDB task */
-gulp.task('mongo-start', runCommand('mongod --dbpath ./db'));
-gulp.task('mongo-stop', runCommand('mongo localhost/Midify-dev --eval "db.shutdownServer()"'));
-
 /**
  * Compile SASS
  */
@@ -263,10 +259,6 @@ function waitForExpress (cb) {
 /**
  * Launch server
  */
-gulp.task('clean:db', function (cb) {
-  del(['db/**', '!db'], cb);
-});
-
 gulp.task('serve', ['watch'], function () {
   return $.nodemon({
       script: 'server/server.js',
