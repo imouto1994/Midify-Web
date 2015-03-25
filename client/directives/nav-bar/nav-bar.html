@@ -2,9 +2,9 @@
   <div class="md-toolbar-tools">
     <img src="../../assets/images/logo.png" class="nav-logo">
     <span flex></span>
-    <span>
-      <md-button ng-click="signIn($event)">Sign In</md-button>
-      <md-button ng-click="signUp($event)">Sign Up</md-button>
-    </span>
+    <md-button ng-click="signIn($event)" ng-if="!Auth.isLogged()">Log In With Facebook</md-button>
+    <img  ng-src="http://graph.facebook.com/{{Auth.getUser().id}}/picture?type=large" 
+            ng-if="Auth.isLogged()" class="nav-profile-picture">
+    <span class="nav-profile-name" ng-if="Auth.isLogged()">{{ Auth.getUser().name }}</span>
   </div>
 </md-toolbar>

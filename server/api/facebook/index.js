@@ -2,9 +2,9 @@
 
 var express = require('express');
 var router = express.Router();
-var controller = require('./user.controller');
+var facebookApi = require('./facebook.controller.js');
 var auth = require('../../auth/auth.service');
 
-router.post('/', controller.create);
+router.get('/me', auth.isAuthenticated, facebookApi.getMe);
 
 module.exports = router;

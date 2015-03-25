@@ -1,7 +1,27 @@
 'use strict';
 
-var app = angular.module('Midify', ['ngRoute', 'ngCookies', 'ngMaterial', 'btford.socket-io']);
+var app = angular.module('Midify', 
+  [ 'ngRoute', 
+    'ngCookies', 
+    'ngMaterial',
+    'ngAnimate', 
+    'facebook'
+  ]);
 
+/*
+  FACEBOOK SDK CONFIGURATION
+ */
+var FACEBOOK_ID = '817233611663903'
+app.config(function(FacebookProvider) {
+  FacebookProvider.init({
+    appId: FACEBOOK_ID,
+    status: false
+  });
+});
+
+/*
+  ROUTE CONFIGURATION
+ */
 app.config(function ($routeProvider, $locationProvider, $httpProvider) {
   $routeProvider
     .otherwise({
@@ -12,7 +32,9 @@ app.config(function ($routeProvider, $locationProvider, $httpProvider) {
   $httpProvider.interceptors.push('authInterceptor');
 });
 
-// Material Color Configuration
+/*
+  MATERIAL THEME CONFIGURATION
+ */
 app.config(function ($mdThemingProvider) {
   var defaultTheme = $mdThemingProvider.theme('default');
 
@@ -27,24 +49,28 @@ app.config(function ($mdThemingProvider) {
   // Accent Scheme
 
   // Warn Scheme 
+  
 });
 
+/** 
+ * AUTHENTICATION INTERCEPTOR
+ */
 app.factory('authInterceptor',
   function ($rootScope, $q, $cookieStore, $location) {
     return {
-
       request: function (config) {
         config.headers = config.headers || {};
         if ($cookieStore.get('token')) {
-          config.headers.Authorization = 'Bearer ' + $cookieStore.get('token');
+          config.headers.Authorization = $cookieStore.get('token');
         }
         return config;
       },
 
       responseError: function (response) {
         if (response.status === 401) {
-          $location.path('/login');
+          $location.path('/');
           $cookieStore.remove('token');
+          $cookieStore.remove('userId');
           return $q.reject(response);
         }
         else {
@@ -54,8 +80,12 @@ app.factory('authInterceptor',
 
     };
   }
-)
+);
 
+/*
+  RUN CONFIGURATION
+ */
 app.run(function ($rootScope, Auth) {
   $rootScope.Auth = Auth;
+  $rootScope.Auth.checkValidAuthentication();
 });

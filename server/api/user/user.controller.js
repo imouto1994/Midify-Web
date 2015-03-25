@@ -1,11 +1,12 @@
 'use strict';
 
 var config = require('../../config/environment');
-var jwt = require('jsonwebtoken');
+var chalk = require('chalk');
 var User = require('./user.model');
 
 function handleError (res, err) {
-  return res.status(500).send(err);
+  console.log(chalk.red(err));
+  return res.status(500).json({error: err});
 }
 
 /**
@@ -16,29 +17,9 @@ function handleError (res, err) {
  */
 exports.create = function (req, res) {
   User.create(req.body, function (err, user) {
-    if (err) { return handleError(res, err); }
-    var token = jwt.sign(
-      { _id: user._id },
-      config.secrets.session,
-      { expiresInMinutes: 60 * 5 }
-    );
-    res.status(201).json({ token: token, user: user });
-  });
-};
-
-/**
- * Return the current logged user.
- *
- * @param req
- * @param res
- */
-exports.getMe = function (req, res) {
-  var userId = req.user._id;
-  User.findOne({
-    _id: userId
-  }, '-salt -passwordHash', function (err, user) {
-    if (err) { return handleError(res, err); }
-    if (!user) { return res.json(401); }
-    res.status(200).json(user);
+    if (err) { 
+      return handleError(res, err); 
+    }
+    res.status(201).json({ user: user });
   });
 };

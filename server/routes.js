@@ -4,8 +4,10 @@ var config = require('./config/environment');
 
 module.exports = function (app) {
 
-  // API
+  // APIs
   app.use('/api/users', require('./api/user'));
+  //app.use('/api/midi', require('./api/midi'));
+  app.use('/api/facebook', require('./api/facebook'));
 
   // Auth
   app.use('/auth', require('./auth'));

@@ -27,7 +27,6 @@ module.exports = function (config) {
       'bower_components/angular-mocks/angular-mocks.js',
       'bower_components/angular-route/angular-route.js',
       'bower_components/angular-cookies/angular-cookies.js',
-      'bower_components/angular-socket-io/socket.min.js',
       'app.js',
       'views/**/*.js',
       'services/**/*.js',
@@ -37,8 +36,7 @@ module.exports = function (config) {
     ],
 
     exclude: [
-      'views/**/*.e2e.js',
-      'services/socket/socket.service.js'
+      'views/**/*.e2e.js'
     ],
 
     reporters: ['progress'],

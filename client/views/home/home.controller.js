@@ -1,12 +1,9 @@
 'use strict';
 
-angular.module('Midify')
-  .controller('HomeCtrl', function () {
+var HomeController = function ($scope, $routeParams, Auth) {
+  $scope.signIn = function (ev) {
+    Auth.login();
+  }
+}
 
-    var vm = this;
-
-    angular.extend(vm, {
-      name: 'HomeCtrl'
-    });
-
-  });
+angular.module('Midify').controller('HomeCtrl', HomeController);

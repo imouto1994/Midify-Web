@@ -1,84 +1,163 @@
 'use strict';
 
-angular.module('Midify')
-  .service('Auth', function ($rootScope, $cookieStore, $q, $http) {
+/*
+  AUTHENTICATION SERVICE
+ */
+var AuthService = function ($q, $http, $cookieStore, $location, Facebook) {
+  var _user = {};
 
-    var _user = {};
+  /**
+   * Login Action
+   */
+  this.facebookLogin = function () {
+    var deferred = $q.defer();
+    var self = this;
 
-    if ($cookieStore.get('token')) {
-      $http.get('/api/users/me')
-        .then(function (res) {
-          _user = res.data;
-        })
-        .catch(function (err) {
-          console.log(err);
-        });
+    Facebook.login(
+      function (response) {
+        if (response.authResponse) {
+          console.log('User has been logged in successfully.');
+          var user = {
+            token: response.authResponse.accessToken,
+            userId: response.authResponse.userID
+          };
+          $cookieStore.put("token", user.token);
+          $cookieStore.put("userId", user.userId);
+          deferred.resolve(user);
+        } else {
+          console.log('User has been logged in unsuccessfully ! :(');
+          deferred.reject();
+        }
+      }
+    );
+
+    return deferred.promise;
+  };
+
+  this.login = function() {
+    var self = this;
+
+    this.facebookLogin().then(
+      function(user) {
+        $http.post('/api/users', user).then(
+          function (data, status) {
+            console.log(data.status + ': User token has been registered successfully');
+            $location.path('/personal/' + user.userId);
+            self.fetchUserInfo();
+          }
+        );
+      }
+    );
+  }
+
+
+  /**
+   * Logout
+   */
+  this.logout = function () {
+    $cookieStore.remove('token');
+    $cookieStore.remove('userId');
+  };
+
+  /**
+   * Check authentication validity
+   */
+  this.checkValidAuthentication = function () {
+    var self = this;
+
+    self.fetchLoginStatus().then(
+      function (user) {
+        $http.post('/auth/facebook', user).then(
+          function (data) {
+            if (data.status == 200) {
+              console.log('Token has already been registered');
+            } else if (data.status == 201) {
+              console.log('Token has been created');
+            }
+            $location.path('/personal/' + user.userId);
+            self.fetchUserInfo();
+          }
+        )
+      }
+    );
+  }
+
+  /**
+   * Retrieve login status 
+   */
+  this.fetchLoginStatus = function (useCookie) {
+    useCookie = useCookie || true;
+    var deferred = $q.defer();
+    var self = this;
+
+    if (useCookie && $cookieStore.get('token') && $cookieStore.get('userId')) {
+      deferred.resolve({
+        token: $cookieStore.get('token'),
+        userId: $cookieStore.get('userId')
+      })
+    } else {
+      Facebook.getLoginStatus(function (response) {
+        if (response.status == 'connected') {
+          console.log('User is currently logged in and successfully retrieve user authentication info');
+          var user = {
+            token: response.authResponse.accessToken,
+            userId: response.authResponse.userID
+          };
+          $cookieStore.put("token", user.token);
+          $cookieStore.put("userId", user.userId);
+          deferred.resolve(user);
+        } else if (response.status == 'not authorized') {
+          console.log('User has not been authorized for the application');
+        } else {
+          console.log('User has not been logged into Facebook');
+        }
+      });
     }
+    
+    return deferred.promise;
+  }
 
-    /**
-     * Signup
-     *
-     * @param user
-     * @returns {promise}
-     */
-    this.signup = function (user) {
-      var deferred = $q.defer();
-      $http.post('/api/users', user)
-        .then(function (res) {
-          _user = res.data.user;
-          $cookieStore.put('token', res.data.token);
-          deferred.resolve();
-        })
-        .catch(function (err) {
-          deferred.reject(err.data);
-        });
-      return deferred.promise;
-    };
+  /**
+   * Fetch user information
+   */
+  this.fetchUserInfo = function() {
+    Facebook.api('/me', function (userData) {
+      if (!userData || userData.error) {
+        console.log('Access token has become invalid');
+      } else {
+        _user = userData;
+        console.log("Successfully fetch user information");
+      }
+    });
+  }
 
-    /**
-     * Login
-     *
-     * @param user
-     * @returns {promise}
-     */
-    this.login = function (user) {
-      var deferred = $q.defer();
-      $http.post('/auth/local', user)
-        .then(function (res) {
-          _user = res.data.user;
-          $cookieStore.put('token', res.data.token);
-          deferred.resolve();
-        })
-        .catch(function (err) {
-          deferred.reject(err.data);
-        });
-      return deferred.promise;
-    };
+  this.fetchUserInfo = function() {
+    $http.get('/api/facebook/me').then(
+      function (res) {
+        _user = res.data;
+      },
+      function (err) {
+        console.log(err);
+      });
+  }
 
-    /**
-     * Logout
-     */
-    this.logout = function () {
-      $cookieStore.remove('token');
-      _user = {};
-    };
 
-    /**
-     * Check if user is logged
-     *
-     * @returns {boolean}
-     */
-    this.isLogged = function () {
-      return _user.hasOwnProperty('email');
-    };
+  /**
+   * Check if user is logged
+   *
+   */
+  this.isLogged = function () {
+    return typeof _user.id != 'undefined'
+  };
 
-    /**
-     * Returns the user
-     *
-     * @returns {object}
-     */
-    this.getUser = function () {
-      return _user;
-    };
+  /**
+   * Returns the user
+   *
+   */
+  this.getUser = function () {
+    return _user;
+  };
+};
 
-  });
+angular.module('Midify').service('Auth', AuthService);
+

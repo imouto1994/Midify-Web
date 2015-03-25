@@ -1,15 +1,19 @@
 // Import css
 @import 'font-family';
+@import 'animate';
 @import 'nav-bar';
 @import 'home';
+@import 'personal';
 
 html, body {
   height: 100%;
 
   & > md-content {
     height: calc(100% - 64px);
-    background: url('../../assets/images/bg.jpg');
-    background-size: cover;
+
+    & > div {
+      height: 100%;
+    }
   }
 }
 

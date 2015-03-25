@@ -1,0 +1,33 @@
+@mixin fadeAnimate($duration, $durationDelay: 0s) {
+  &.ng-enter, &.ng-leave {
+    transition: all $duration ease $durationDelay;
+    -webkit-transition: all $duration ease $durationDelay;
+  }
+
+  &.ng-enter, &.ng-leave.ng-leave-active {
+    opacity: 0;
+  }
+
+  &.ng-leave, &.ng-enter.ng-enter-active {
+    opacity: 1;
+  }
+}
+
+@mixin fadeLeftAnimate($duration, $durationDelay: 0s) {
+  &.ng-enter, &.ng-leave {
+    transition: all $duration ease $durationDelay;
+    -webkit-transition: all $duration ease $durationDelay;
+  }
+
+  &.ng-enter, &.ng-leave.ng-leave-active {
+    opacity: 0;
+    transform: translateX(-100%);
+    -webkit-transform: translateX(-100%);
+  }
+
+  &.ng-leave, &.ng-enter.ng-enter-active {
+    opacity: 1;
+    transform: translateX(0);
+    -webkit-transform: translateX(0);
+  }
+}
