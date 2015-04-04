@@ -1,0 +1,20 @@
+'use strict'
+
+// List of status codes for HTTP Responses
+module.exports.STATUS_CODE = {
+  // Success Status Code
+  SUCCESS_OK: 200,
+  SUCCESS_CREATED: 201,
+  // Client Error Status Code
+  CLIENT_BAD_REQUEST: 400,
+  CLIENT_UNAUTHORIZED: 401,
+  CLIENT_NOT_FOUND: 404,
+  CLIENT_TIMEOUT: 408,
+  CLIENT_REQUEST_TOO_LARGE: 413,
+  // Server Error Status Code
+  SERVER_INTERNAL_ERROR: 500,
+  SERVER_NOT_IMPLEMENTED: 501,
+  SERVER_BAD_GATEWAY: 502,
+  SERVER_SERVICE_UNAVAILABLE: 503
+}
+

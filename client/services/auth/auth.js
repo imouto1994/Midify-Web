@@ -29,7 +29,7 @@ var AuthService = function ($q, $http, $cookieStore, $location, Facebook) {
           deferred.reject();
         }
       }
-    );
+    , {scope: 'email,public_profile,user_friends'});
 
     return deferred.promise;
   };
@@ -121,23 +121,13 @@ var AuthService = function ($q, $http, $cookieStore, $location, Facebook) {
    * Fetch user information
    */
   this.fetchUserInfo = function() {
-    Facebook.api('/me', function (userData) {
-      if (!userData || userData.error) {
-        console.log('Access token has become invalid');
-      } else {
-        _user = userData;
-        console.log("Successfully fetch user information");
-      }
-    });
-  }
-
-  this.fetchUserInfo = function() {
     $http.get('/api/facebook/me').then(
-      function (res) {
-        _user = res.data;
+      function (user) {
+        console.log("Successfully fetch user information");
+        _user = user;
       },
       function (err) {
-        console.log(err);
+        console.log("Error: " + err);
       });
   }
 

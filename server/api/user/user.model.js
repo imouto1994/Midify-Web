@@ -1,14 +1,23 @@
 'use strict';
 
 var mongoose = require('mongoose');
+var q = require('q');
+
 var Schema = mongoose.Schema;
 
-/* User Schema */
+/**
+ * Schema Declaration
+ */
 var UserSchema = new Schema({
-  _id: String,
-  userId: String
+  // Token id
+  _id: { type: String, required: true },
+  // Facebook user id
+  userId: { type: String, required: true }
 });
 
+/**
+ * Virtual Variables
+ */
 UserSchema
   .virtual('token')
   .get(function () {
@@ -21,8 +30,18 @@ UserSchema
 /**
  * Methods
  */
-UserSchema.methods = {
-  
+UserSchema.statics = {
+  createUser: function (user) {
+    var deferred = q.defer();
+    this.create(user, function (err, user) {
+      if (err) {
+        deferred.reject(err);
+      } else {
+        deferred.resolve(user);
+      }
+    });
+    return deferred.promise;
+  }
 };
 
 module.exports = mongoose.model('User', UserSchema);

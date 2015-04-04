@@ -2,9 +2,8 @@
 
 var express = require('express');
 var router = express.Router();
-var controller = require('./user.controller');
-var auth = require('../../auth/auth.service');
+var UserController = require('./user.controller');
 
-router.post('/', controller.create);
+router.post('/', UserController.createUser);
 
 module.exports = router;

@@ -1,9 +1,11 @@
 'use strict';
 
 var express = require('express');
-var User = require('../../api/user/user.model');
-var UserController = require('../../api/user/user.controller')
 var router = express.Router();
+
+var User = require('../../api/user/user.model');
+var UserController = require('../../api/user/user.controller');
+var Status = require('../../helper/const').STATUS_CODE;
 
 router.post('/', function (req, res, next) {
   User.findById(req.body.token, function (err, user) {
@@ -11,9 +13,9 @@ router.post('/', function (req, res, next) {
       return next(err); 
     }
     if (!user) { 
-      UserController.create(req, res);
+      UserController.createUser(req, res);
     } else {
-      res.status(200).json({});
+      res.status(Status.SUCCESS_OK).json({});
     }
   });
 });

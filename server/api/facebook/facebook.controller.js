@@ -1,26 +1,81 @@
 'use strict';
 
 var fbgraph = require('fbgraph');
-var chalk = require('chalk');
+var q = require('q');
+
+var Log = require('../../helper/log');
+var Status = require('../../helper/const').STATUS_CODE;
 
 /* Set Application Secret For Security */
 var FACEBOOK_APP_SECRET = '5c0455324efff8a5440ae50f81a8b4fd';
 fbgraph.setAppSecret(FACEBOOK_APP_SECRET);
 
 /**
- * Creates a new user in the DB.
- *
- * @param req
- * @param res
+ * [Retrieve the profile of me]
+ * @param  req [Request from client which must pass the authentication middleware]
+ * @param  res [Return the profile of me]
  */
 exports.getMe = function (req, res) {
   fbgraph.setAccessToken(req.user.token);
-  fbgraph.get('/' + req.user.userId, function (err, response) {
+  var userId = req.user.userId;
+
+  fbgraph.get('/' + userId, function (err, response) {
     if (err) {
-      console.log(chalk.red(err))
-      res.status(500).json({error: err});
+      Log.logError(err);
+      res.status(Status.SERVER_INTERNAL_ERROR).json({error: err});
     } else {
-      res.status(200).json(response);
+      res.status(Status.SUCCESS_OK).json(response.data);
     }
-  })
+  });
 };
+
+/**
+ * [Retrieve the profile of specified user]
+ * @param  req [Request from client which must have the ID of specified user in params]
+ * @param  res [Return the profile of specified user]
+ */
+exports.getUser = function (req, res) {
+  fbgraph.setAccessToken(req.user.token);
+  var userId = req.params.userId;
+
+  fbgraph.get('/' + userId, function (err, response) {
+    if (err) {
+      Log.logError(err);
+      res.status(Status.SERVER_INTERNAL_ERROR).json({error: err});
+    } else {
+      res.status(Status.SUCCESS_OK).json(response.data);
+    }
+  });
+};
+
+/**
+ * [Retrieve the list of friends who are also using this application]
+ * @param  req [Request from client which must pass the authentication middleware]
+ * @param  res [Return the profiles of friends using this application]
+ */
+exports.getFriends = function (req, res) {
+  var deferred = q.defer();
+  var userId = req.user.userId;
+
+  fbgraph.setAccessToken(req.user.token);
+  fbgraph.get('/' + userId + '/friends', function (err, response) {
+    if (err) {
+      Log.logError(err);
+      deferred.reject(err);
+    } else {
+      deferred.resolve(response.data);
+    }
+  });
+};
+
+exports.getFriendList = function (req, res) {
+  module.exports.getFriends(req, res).then(
+    function (friends) {
+      res.status(Status.SUCCESS_OK).json(friends);
+    },
+    function (err) {
+      res.status(Status.SERVER_INTERNAL_ERROR).json({error: err});
+    }
+  )
+}
+
