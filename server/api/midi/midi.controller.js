@@ -26,15 +26,15 @@ exports.uploadMidi = function (req, res) {
     var newMidi = {
       ownerId: req.user.userId,
       userId: req.user.userId,
-      filePath: req.files.userMidi.path,
-      duration: req.midi.duration,
-      title: req.midi.title,
-      description: req.midi.description
+      filePath: req.files.midi.path,
+      duration: req.body.duration,
+      title: req.body.title
     };
+    Log.logJSON(newMidi);
     Midi.createMidi(newMidi).then(
       function (midi) {
         Log.logSuccess("MIDI file has been created successfully!");
-        res.status(Status.SUCCESS_CREATED).json({midi: midi});
+        res.status(Status.SUCCESS_CREATED).json(midi);
       },  
       function (err) {
         _handleError(res, err);
@@ -111,8 +111,7 @@ exports.forkMidi = function (req, res) {
             userId: req.user.userId,
             filePath: midi.filePath,
             duration: midi.duration,
-            title: midi.title,
-            description: midi.description
+            title: midi.title
           };
           Midi.createMidi(newMidi);
         }

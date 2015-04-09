@@ -18,13 +18,12 @@ fbgraph.setAppSecret(FACEBOOK_APP_SECRET);
 exports.getMe = function (req, res) {
   fbgraph.setAccessToken(req.user.token);
   var userId = req.user.userId;
-
   fbgraph.get('/' + userId, function (err, response) {
     if (err) {
       Log.logError(err);
       res.status(Status.SERVER_INTERNAL_ERROR).json({error: err});
     } else {
-      res.status(Status.SUCCESS_OK).json(response.data);
+      res.json(response);
     }
   });
 };

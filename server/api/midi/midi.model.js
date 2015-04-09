@@ -3,14 +3,14 @@
 var mongoose = require('mongoose');
 var q = require('q');
 
+var Log = require('../../helper/log');
+
 var Schema = mongoose.Schema;
 
 /**
  * Schema Declaration
  */
 var MidiSchema = new Schema({
-  // ID of the MIDI track
-  _id: { type: String, required: true },
   // Reference ID of the MIDI track if it is a reference
   refId: { type: String, default: ''},
   // ID of user original owning this MIDI track
@@ -23,8 +23,6 @@ var MidiSchema = new Schema({
   duration: { type: Number, default: 1 },
   // Title of MIDI track
   title: { type: String, required: true },
-  // Description of MIDI track
-  description: { type: String, default: '' },
   // Indicator whether this track is public or private
   isPublic: { type: Boolean, default: true },
   // Time created of this MIDI track
@@ -57,10 +55,12 @@ MidiSchema.statics = {
    */
   createMidi: function (midi) {
     var deferred = q.defer();
+    Log.logMessage("Creating midi...");
     this.create(midi, function (err, midi) {
       if (err) {
         deferred.reject(err);
       } else {
+        Log.logSuccess("Creating MIDI successfully");
         deferred.resolve(midi);
       }
     });
@@ -127,7 +127,7 @@ MidiSchema.statics = {
     });
 
     return deferred.promise;
-  }
+  },
 
   // TODO: To handle when all references and the midi itself are deleted
   deleteMidiFile: function (filePath) {
@@ -135,4 +135,4 @@ MidiSchema.statics = {
   }
 }
 
-module.exports = mongoose.model('Midi', UserSchema);
+module.exports = mongoose.model('Midi', MidiSchema);

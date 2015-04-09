@@ -1,7 +1,6 @@
 'use strict';
 
-var express = require('express').Router();
-var multer = require('multer');
+var router = require('express').Router();
 
 var MidiController = require('./midi.controller');
 var AuthCheck = require('../../auth/auth.service').isAuthenticated();
@@ -17,7 +16,5 @@ router.delete('/', AuthCheck, MidiController.deleteMidi);
 // GET REQUEST
 router.get('/', AuthCheck, MidiController.getMidi);
 router.get('/user/', AuthCheck, MidiController.getMidiFromUser);
-
-// PUT REQUEST
 
 module.exports = router;

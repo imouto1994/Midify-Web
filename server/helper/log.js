@@ -17,3 +17,7 @@ exports.logWarning = function (msg) {
 exports.logError = function (msg) {
   console.log(chalk.red(msg));
 }
+
+exports.logJSON = function(json) {
+  console.log(chalk.cyan("%j"), json);
+}

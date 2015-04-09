@@ -1,6 +1,7 @@
 'use strict';
 
 var compose = require('composable-middleware');
+var multer = require('multer');
 var Log = require('../helper/log');
 
 module.exports = {
@@ -14,13 +15,13 @@ module.exports = {
         multer({
           dest: __dirname + '/midiUploads/',
           rename: function (fieldName, fileName) {
-            return fileName + Date.now();
+            return fileName;
           },
           onFileUploadStart: function (file) {
-            Log.logMessage(file.originalName + ' is starting to being uploaded');
+            Log.logMessage(file.originalname + ' is starting to being uploaded');
           },
           onFileUploadComplete: function (file) {
-            Log.logSuccess(file.originalName + ' is uploaded to ' + file.path);
+            Log.logSuccess(file.originalname + ' is uploaded to ' + file.path);
           }
         }
       )

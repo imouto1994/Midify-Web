@@ -57,6 +57,7 @@ var AuthService = function ($q, $http, $cookieStore, $location, Facebook) {
   this.logout = function () {
     $cookieStore.remove('token');
     $cookieStore.remove('userId');
+    $location.path('/');
   };
 
   /**
@@ -121,14 +122,21 @@ var AuthService = function ($q, $http, $cookieStore, $location, Facebook) {
    * Fetch user information
    */
   this.fetchUserInfo = function() {
-    $http.get('/api/facebook/me').then(
-      function (user) {
-        console.log("Successfully fetch user information");
-        _user = user;
-      },
-      function (err) {
-        console.log("Error: " + err);
-      });
+    var self = this;
+
+    $http.get('/api/facebook/me')
+      .success(
+        function (data) {
+          console.log("Successfully fetch user information");
+          _user = data;
+          console.log(_user);
+        }
+      ).error(
+        function (err) {
+          self.logout();
+          console.log("Invalid token so we will log out and redirect to home page");
+        }
+      );
   }
 
 
