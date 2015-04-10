@@ -27,7 +27,6 @@ exports.uploadMidi = function (req, res) {
       ownerId: req.user.userId,
       userId: req.user.userId,
       filePath: req.files.midi.path,
-      duration: req.body.duration,
       title: req.body.title
     };
     Log.logJSON(newMidi);
@@ -110,7 +109,6 @@ exports.forkMidi = function (req, res) {
             ownerId: midi.ownerId,
             userId: req.user.userId,
             filePath: midi.filePath,
-            duration: midi.duration,
             title: midi.title
           };
           Midi.createMidi(newMidi);

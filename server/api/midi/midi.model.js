@@ -19,8 +19,6 @@ var MidiSchema = new Schema({
   userId: { type: String, default: ''},
   // File Path of MIDI track
   filePath: { type: String, required: true },
-  // Duration of MIDI track
-  duration: { type: Number, default: 1 },
   // Title of MIDI track
   title: { type: String, required: true },
   // Indicator whether this track is public or private
