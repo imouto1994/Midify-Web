@@ -15,6 +15,6 @@ router.delete('/', AuthCheck, MidiController.deleteMidi);
 
 // GET REQUEST
 router.get('/', AuthCheck, MidiController.getMidi);
-router.get('/user/', AuthCheck, MidiController.getMidiFromUser);
+router.get('/user', AuthCheck, MidiController.getMidiFromUser);
 
 module.exports = router;

@@ -27,13 +27,15 @@ exports.uploadMidi = function (req, res) {
       ownerId: req.user.userId,
       userId: req.user.userId,
       filePath: req.files.midi.path,
-      title: req.body.title
+      title: req.body.title,
+      isPublic: req.body.isPublic
     };
-    Log.logJSON(newMidi);
+    Log.logJSONInfo(newMidi);
     Midi.createMidi(newMidi).then(
       function (midi) {
         Log.logSuccess("MIDI file has been created successfully!");
-        res.status(Status.SUCCESS_CREATED).json(midi);
+        Log.logJSONInfo(midi);
+        res.status(Status.SUCCESS_OK).json(midi);
       },  
       function (err) {
         _handleError(res, err);
@@ -175,7 +177,7 @@ exports.deleteMidi = function (req, res) {
  */
 exports.getMidi = function (req, res) {
   var userId = req.user.userId;
-  var trackId = req.body.trackId;
+  var trackId = req.param('trackId');
   var friendIds = [];
 
   Facebook.getFriends(req, res).then(
@@ -198,7 +200,7 @@ exports.getMidi = function (req, res) {
         _handleError(res, err);
       } else {
         Log.logSuccess("Receive the required MIDI track successfully");
-        res.status(Status.SUCCESS_OK).json({midi: midi});
+        res.status(Status.SUCCESS_OK).json(midi);
       }
     },  
     function (err) {
@@ -215,20 +217,19 @@ exports.getMidi = function (req, res) {
  */
 exports.getMidiFromUser = function (req, res) {
   var userId = req.user.userId;
-  var targetUserId = req.body.targetUserId;
+  var targetUserId = req.param('userId');
   var friendIds = [];
-
   Facebook.getFriends(req, res).then(
     function (friends) {
-      for (var friend in friends) {
-        friendIds.push(friend.id);
+      for (var index in friends) {
+        friendIds.push(friends[index].id);
       }
-      if (friendIds.indexOf(targetUserId) == -1) {
+      if (targetUserId != userId && friendIds.indexOf(targetUserId) == -1) {
         var err = "Cannot get MIDIs from users who are not your friend";
         _handleError(res, err);
       } else {
         var isRequestUser = targetUserId == userId;
-        Midi.findMidiByUser(targetUserId, isRequestUser);
+        return Midi.findMidiByUser(targetUserId, isRequestUser);
       }
     },
     function (err) {

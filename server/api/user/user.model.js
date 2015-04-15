@@ -13,7 +13,7 @@ var UserSchema = new Schema({
   _id: { type: String, required: true },
   // Facebook user id
   userId: { type: String, required: true }
-});
+}, {versionKey: false});
 
 /**
  * Virtual Variables

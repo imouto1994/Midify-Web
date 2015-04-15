@@ -16,7 +16,7 @@ var MidiSchema = new Schema({
   // ID of user original owning this MIDI track
   ownerId: { type: String, required: true },
   // ID of current user having this MIDI track
-  userId: { type: String, default: ''},
+  userId: { type: String, required: true },
   // File Path of MIDI track
   filePath: { type: String, required: true },
   // Title of MIDI track
@@ -25,7 +25,7 @@ var MidiSchema = new Schema({
   isPublic: { type: Boolean, default: true },
   // Time created of this MIDI track
   editedTime: { type: Date, default: Date.now }
-});
+}, { versionKey: false });
 
 var INVALID_UPDATE_FIELDS = [
   'refId',
@@ -53,7 +53,7 @@ MidiSchema.statics = {
    */
   createMidi: function (midi) {
     var deferred = q.defer();
-    Log.logMessage("Creating midi...");
+    Log.logInfo("Creating midi...");
     this.create(midi, function (err, midi) {
       if (err) {
         deferred.reject(err);

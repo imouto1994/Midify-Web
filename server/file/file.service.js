@@ -18,7 +18,7 @@ module.exports = {
             return fileName;
           },
           onFileUploadStart: function (file) {
-            Log.logMessage(file.originalname + ' is starting to being uploaded');
+            Log.logInfo(file.originalname + ' is starting to being uploaded');
           },
           onFileUploadComplete: function (file) {
             Log.logSuccess(file.originalname + ' is uploaded to ' + file.path);

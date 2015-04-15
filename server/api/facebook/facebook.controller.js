@@ -20,7 +20,7 @@ exports.getMe = function (req, res) {
   var userId = req.user.userId;
   fbgraph.get('/' + userId, function (err, response) {
     if (err) {
-      Log.logError(err);
+      Log.logJSONError(err);
       res.status(Status.SERVER_INTERNAL_ERROR).json({error: err});
     } else {
       res.json(response);
@@ -35,11 +35,11 @@ exports.getMe = function (req, res) {
  */
 exports.getUser = function (req, res) {
   fbgraph.setAccessToken(req.user.token);
-  var userId = req.params.userId;
+  var userId = req.param('userId');
 
   fbgraph.get('/' + userId, function (err, response) {
     if (err) {
-      Log.logError(err);
+      Log.logJSONError(err);
       res.status(Status.SERVER_INTERNAL_ERROR).json({error: err});
     } else {
       res.status(Status.SUCCESS_OK).json(response.data);
@@ -59,18 +59,28 @@ exports.getFriends = function (req, res) {
   fbgraph.setAccessToken(req.user.token);
   fbgraph.get('/' + userId + '/friends', function (err, response) {
     if (err) {
-      Log.logError(err);
+      Log.logJSONError(err);
       deferred.reject(err);
     } else {
       deferred.resolve(response.data);
     }
   });
+
+  return deferred.promise;
 };
 
 exports.getFriendList = function (req, res) {
   module.exports.getFriends(req, res).then(
     function (friends) {
-      res.status(Status.SUCCESS_OK).json(friends);
+      var friendList = [];
+      for (var i = 0; i < friends.length; i++) {
+        var friend = friends[i];
+        friendList.push({
+          userId: friend.id,
+          name: friend.name
+        });
+      }
+      res.status(Status.SUCCESS_OK).json(friendList);
     },
     function (err) {
       res.status(Status.SERVER_INTERNAL_ERROR).json({error: err});
