@@ -6,6 +6,7 @@ var Log = require('../../helper/log');
 var Status = require('../../helper/const').STATUS_CODE;
 var Midi = require('./midi.model');
 var Facebook = require('../facebook/facebook.controller');
+var File = require('../../file/file.service');
 
 function _handleError (res, err) {
   Log.logError(err);
@@ -23,22 +24,30 @@ exports.convertMidi = function (req, res) {
     var err = 'Failed to upload the MIDI track';
     _handleError(res, err);
   } else {
-    var newMidi = {
-      ownerId: req.user.userId,
-      userId: req.user.userId,
-      filePath: req.files.midi.path,
-      title: req.body.title,
-      isPublic: req.body.isPublic
-    };
-    Log.logJSONInfo(newMidi);
-    Midi.createMidi(newMidi).then(
-      function (midi) {
-        Log.logSuccess("MIDI file has been created successfully!");
-        Log.logJSONInfo(midi);
-        res.status(Status.SUCCESS_OK).json(midi);
-      },  
+    File.convertMidi(req.files.wav.path).then(
+      function (midiFilePath) {
+        var newMidi = {
+          ownerId: req.user.userId,
+          userId: req.user.userId,
+          filePath: midiFilePath,
+          wavFilePath: req.files.wav.path,
+          title: req.body.title,
+          isPublic: req.body.isPublic
+        };
+        Log.logJSONInfo(newMidi);
+        Midi.createMidi(newMidi).then(
+          function (midi) {
+            Log.logSuccess("MIDI file has been created successfully!");
+            Log.logJSONInfo(midi);
+            res.status(Status.SUCCESS_OK).json(midi);
+          },  
+          function (err) {
+            _handleError(res, err);
+          }
+        );
+      },
       function (err) {
-        _handleError(res, err);
+        _handleError(res, err);  
       }
     );
   }
@@ -51,22 +60,22 @@ exports.convertMidi = function (req, res) {
  * @return {[type]}     [description]
  */
 exports.downloadMidi = function (req, res) {
-  var trackId = req.body.trackId;
+  var fileId = req.param('fileId');
   var userId = req.user.userId;
-  if (!trackId) {
+  if (!fileId) {
     var err = 'Failed to receive the ID of MIDI track';
     _handleError(res, err);
   } else {
-    Midi.findMidiById(trackId).then(
+    Midi.findMidiById(fileId).then(
       function (midi) {
         if (!midi.filePath) {
           var err = "No file path for the provided track";
           _handleError(res, err);
-        } else if (midi.currentId != userId) {
+        } else if (midi.userId != userId) {
           var err = "User is not allowed to download the MIDI not belonging to him";
           _handleError(res, err);
         } else {
-          res.download(midiFilePath, function (err) {
+          res.download(midi.filePath, function (err) {
             if (err) {
               _handleError(res, err);
             } else {
@@ -89,12 +98,12 @@ exports.downloadMidi = function (req, res) {
  * @return {[type]}     [description]
  */
 exports.forkMidi = function (req, res) {
-  var trackId = req.body.trackId;
-  if (!trackId) {
+  var fileId = req.body.fileId;
+  if (!fileId) {
     var err = 'Failed to receive the ID of MIDI track';
     _handleError(res, err);
   } else {
-    Midi.findMidiById(trackId).then(
+    Midi.findMidiById(fileId).then(
       function (midi) {
         if (!midi) {
           var err = "No midi track for the provided ID";
@@ -107,10 +116,11 @@ exports.forkMidi = function (req, res) {
           _handleError(res, err);
         } else {
           var newMidi = {
-            refId: (midi.refId == '') ? midi.trackId : midi.refId,
+            refId: (midi.refId == '') ? midi.fileId : midi.refId,
             ownerId: midi.ownerId,
             userId: req.user.userId,
             filePath: midi.filePath,
+            wavFilePath: midi.wavFilePath,
             title: midi.title
           };
           Midi.createMidi(newMidi);
@@ -139,9 +149,9 @@ exports.forkMidi = function (req, res) {
  */
 exports.deleteMidi = function (req, res) {
   var userId = req.user.userId;
-  var trackId = req.body.trackId;
+  var fileId = req.body.fileId;
   
-  Midi.findMidiById(trackId).then(
+  Midi.findMidiById(fileId).then(
     function (midi) {
       if (!midi) {
         var err = "No MIDI track for the provided ID";
@@ -150,9 +160,9 @@ exports.deleteMidi = function (req, res) {
         var err = "User is not allowed the MIDI not belonging to him";
         _handleError(res, err);
       } else if (midi.ownerId == userId) {
-        Midi.deleteMidiRefs(trackId);
+        Midi.deleteMidiRefs(fileId);
       } else {
-        Midi.deleteMidi(trackId);
+        Midi.deleteMidi(fileId);
       }
     },
     function (err) {
@@ -177,7 +187,7 @@ exports.deleteMidi = function (req, res) {
  */
 exports.getMidi = function (req, res) {
   var userId = req.user.userId;
-  var trackId = req.param('trackId');
+  var fileId = req.param('fileId');
   var friendIds = [];
 
   Facebook.getFriends(req, res).then(
@@ -185,7 +195,7 @@ exports.getMidi = function (req, res) {
       for (var friend in friends) {
         friendIds.push(friend.id);
       }
-      Midi.findMidiByUser(trackId);
+      Midi.findMidiByUser(fileId);
     },
     function (err) {
       _handleError(res, err);
