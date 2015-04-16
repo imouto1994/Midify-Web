@@ -9,11 +9,11 @@ module.exports = {
    * Attach the user object to the request if authenticated
    * Otherwise returns 403
    */
-  uploadMidi: function () {
+  uploadWav: function () {
     return compose()
       .use(
         multer({
-          dest: __dirname + '/midiUploads/',
+          dest: __dirname + '/wavUploads/',
           rename: function (fieldName, fileName) {
             return fileName;
           },

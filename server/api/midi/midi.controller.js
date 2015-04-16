@@ -18,7 +18,7 @@ function _handleError (res, err) {
  * @param  {[type]} res [description]
  * @return {[type]}     [description]
  */
-exports.uploadMidi = function (req, res) {
+exports.convertMidi = function (req, res) {
   if (!req.files) {
     var err = 'Failed to upload the MIDI track';
     _handleError(res, err);
