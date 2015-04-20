@@ -11,7 +11,6 @@ var path = require('path');
 var async = require('async');
 var _ = require('lodash');
 var fs = require('fs');
-var karma = require('karma').server;
 var $ = require('gulp-load-plugins')();
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
@@ -196,52 +195,6 @@ gulp.task('e2e', ['serve'], function () {
     .on('end', function () {
       process.exit(0);
     });
-});
-
-/**
- * Tests
- */
-function testServer (done) {
-
-  log('Running server tests...', { padding: true });
-
-  gulp.src('server/**/*.spec.js', { read: false })
-    .pipe($.plumber())
-    .pipe($.mocha({ reporter: 'spec' }))
-    .once('end', function () {
-      done();
-    });
-}
-
-function testClient (done) {
-
-  log('Running client tests...', { padding: true });
-
-  karma.start({
-    configFile: __dirname + '/karma.conf.js'
-  }, done);
-}
-
-gulp.task('test', function (done) {
-  process.env.NODE_ENV = 'test';
-  var arg = process.argv[3] ? process.argv[3].substr(2) : false;
-  if (arg === 'client') {
-    return testClient(done);
-  } else if (arg === 'server') {
-    return testServer(function () {
-      done();
-      process.exit();
-    });
-  } else if (arg === false) {
-    return testClient(function () {
-      testServer(function () {
-        done();
-        process.exit();
-      });
-    });
-  } else {
-    console.log('Wrong parameter [%s], availables : --client, --server', arg);
-  }
 });
 
 function waitForExpress (cb) {
