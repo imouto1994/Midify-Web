@@ -66,7 +66,7 @@ ActivitySchema.statics = {
       skip: tick * 20,
       limit: 20
     }
-    this.find(conditions, options, function (err, activities) {
+    this.find(conditions, null, options, function (err, activities) {
       if (err) {
         deferred.reject(err);
       } else {

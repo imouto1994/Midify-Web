@@ -87,9 +87,6 @@ exports.downloadMidi = function (req, res) {
         if (!midi.filePath) {
           var err = "No file path for the provided track";
           _handleError(res, err);
-        } else if (midi.userId != userId) {
-          var err = "User is not allowed to download the MIDI not belonging to him";
-          _handleError(res, err);
         } else {
           res.download(midi.filePath, function (err) {
             if (err) {
@@ -228,7 +225,7 @@ exports.forkMidi = function (req, res) {
     ).then(
       function (forkActivity) {
         if (forkActivity) {
-          res.status(Status.SUCCESS_CREATED).json(midi);
+          res.status(Status.SUCCESS_CREATED).json(newMidi);
         } else {
           _handleError(res, "Fork Activity is null");
         }

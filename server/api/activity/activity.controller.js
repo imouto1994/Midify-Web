@@ -29,7 +29,7 @@ exports.createActivityCreate = function (userId, fileName) {
       deferred.resolve(newActivity);
     },
     function (err) {
-      _handleError(res, err);
+      deferred.reject(err);
     }
   );
 
@@ -51,7 +51,7 @@ exports.createActivityFork = function (userId, targetUserId, fileName) {
       deferred.resolve(newActivity);
     },
     function (err) {
-      _handleError(res, err);
+      deferred.reject(err);
     }
   );
 
@@ -73,7 +73,7 @@ exports.createActivityPlay = function (userId, targetUserId, fileName) {
       deferred.resolve(newActivity);
     },
     function (err) {
-      _handleError(res, err);
+      deferred.reject(err);
     }
   );
 
@@ -83,10 +83,12 @@ exports.createActivityPlay = function (userId, targetUserId, fileName) {
 exports.getActivitiesForUser = function (req, res) {
   var userId = req.user.userId;
   var friendIds = [];
+  var friendNamesMap = {};
   Facebook.getFriends(req, res).then(
     function (friends) {
       for (var index in friends) {
         friendIds.push(friends[index].id);
+        friendNamesMap[friends[index].id] = friends[index].name; 
       }
       return Activity.getActivitiesFromUsers(0, friendIds);
     },
@@ -95,7 +97,13 @@ exports.getActivitiesForUser = function (req, res) {
     }
   ).then(
     function (activities) {
-      Log.logJSONInfo(activities);
+      for (var i = 0; i < activities.length; i++) {
+        activities[i] = activities[i].toObject();
+        var userName = friendNamesMap[activities[i].userId];
+        var targetUserName = friendNamesMap[activities[i].targetUserId];
+        activities[i].userName = userName;
+        activities[i].targetUserName = targetUserName;
+      }
       res.status(200).json(activities);
     },
     function (err) {
