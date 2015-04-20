@@ -81,5 +81,25 @@ exports.createActivityPlay = function (userId, targetUserId, fileName) {
 };
 
 exports.getActivitiesForUser = function (req, res) {
-
+  var userId = req.user.userId;
+  var friendIds = [];
+  Facebook.getFriends(req, res).then(
+    function (friends) {
+      for (var index in friends) {
+        friendIds.push(friends[index].id);
+      }
+      return Activity.getActivitiesFromUsers(0, friendIds);
+    },
+    function (err) {
+      _handleError(res, err);
+    }
+  ).then(
+    function (activities) {
+      Log.logJSONInfo(activities);
+      res.status(200).json(activities);
+    },
+    function (err) {
+      _handleError(res, err);
+    }
+  );
 };
