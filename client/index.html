@@ -34,10 +34,10 @@
   <body>
     <!-- Navigation Bar -->
     <nav-bar></nav-bar>
-    
     <!-- Main Content -->
-    <md-content>
-        <div ng-view>
+    <md-content layout="row">
+        <side-bar></side-bar>
+        <div flex ng-view>
         <!-- Routing Views -->  
         </div>
     </md-content>
@@ -57,7 +57,9 @@
     <!-- inject:js -->
     <script src="app.js"></script>
     <script src="directives/nav-bar/nav-bar.directive.js"></script>
-    <script src="services/auth/auth.js"></script>
+    <script src="directives/side-bar/side-bar.directive.js"></script>
+    <script src="services/api/facebook.service.js"></script>
+    <script src="services/auth/auth.service.js"></script>
     <script src="views/home/home.controller.js"></script>
     <script src="views/home/home.js"></script>
     <script src="views/personal/personal.controller.js"></script>

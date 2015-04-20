@@ -1,0 +1,28 @@
+<md-sidenav 
+  class="md-sidenav-left md-whiteframe-z2 side-bar" ng-if="Auth.isLogged()" ng-init="getFriends()"
+  md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')">
+  <md-list role="list" class="md-default-theme" aria-hidden="false">
+    <md-subheader class="md-no-sticky">ME</md-subheader>
+    <md-divider></md-divider>
+    <md-list-item class="md-clickable">
+      <md-button class="md-no-style md-default-theme">
+        <div class="md-list-item-inner">
+          <img alt="{{ me.name }}" class="md-avatar" 
+            ng-src="http://graph.facebook.com/{{me.userId}}/picture?type=large"  />
+          <p>{{ me.name }}</p>
+        </div>
+      </md-button>
+    </md-list-item>
+    <md-subheader class="md-no-sticky">FRIENDS</md-subheader>
+    <md-divider></md-divider>
+    <md-list-item ng-repeat="friend in friends" class="md-clickable">
+      <md-button class="md-no-style md-default-theme">
+        <div class="md-list-item-inner">
+          <img alt="{{ friend.name }}" class="md-avatar" 
+            ng-src="http://graph.facebook.com/{{friend.userId}}/picture?type=large"  />
+          <p>{{ friend.name }}</p>
+        </div>
+      </md-button>
+    </md-list-item>
+  </md-list>
+</md-sidenav>

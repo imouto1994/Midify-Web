@@ -57,6 +57,7 @@ var AuthService = function ($q, $http, $cookieStore, $location, Facebook) {
   this.logout = function () {
     $cookieStore.remove('token');
     $cookieStore.remove('userId');
+    $cookieStore.remove('userName');
     $location.path('/');
   };
 
@@ -129,6 +130,7 @@ var AuthService = function ($q, $http, $cookieStore, $location, Facebook) {
         function (data) {
           console.log("Successfully fetch user information");
           _user = data;
+          $cookieStore.put("userName", _user.name);
           console.log(_user);
         }
       ).error(
