@@ -7,6 +7,7 @@ module.exports = function (app) {
   // APIs
   app.use('/api/users', require('./api/user'));
   app.use('/api/midi', require('./api/midi'));
+  app.use('/api/activity', require('./api/activity'));
   app.use('/api/facebook', require('./api/facebook'));
 
   // Auth
