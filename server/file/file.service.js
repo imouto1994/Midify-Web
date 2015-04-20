@@ -18,7 +18,7 @@ module.exports = {
         multer({
           dest: __dirname + '/wavUploads/',
           rename: function (fieldName, fileName) {
-            return fileName;
+            return fileName + Date.now();
           },
           onFileUploadStart: function (file) {
             Log.logInfo(file.originalname + ' is starting to being uploaded');

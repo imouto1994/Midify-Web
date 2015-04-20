@@ -10,6 +10,7 @@ var WavUpload = require('../../file/file.service').uploadWav();
 router.post('/fork', AuthCheck, MidiController.forkMidi);
 router.post('/convert', AuthCheck, WavUpload, MidiController.convertMidi);
 router.get('/download', AuthCheck, MidiController.downloadMidi);
+router.get('/remotePlay', AuthCheck, MidiController.downloadMidiForRemotePlay);
 
 // DELETE REQUEST
 router.delete('/', AuthCheck, MidiController.deleteMidi);

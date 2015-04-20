@@ -1,6 +1,7 @@
 'use strict';
 
 var mongoose = require('mongoose');
+var ObjectId = require('mongoose').Types.ObjectId;
 var q = require('q');
 
 var Log = require('../../helper/log');
@@ -12,7 +13,7 @@ var Schema = mongoose.Schema;
  */
 var MidiSchema = new Schema({
   // Reference ID of the MIDI track if it is a reference
-  refId: { type: String, default: ''},
+  refId: { type: String},
   // ID of user original owning this MIDI track
   ownerId: { type: String, required: true },
   // ID of current user having this MIDI track
@@ -23,26 +24,13 @@ var MidiSchema = new Schema({
   wavFilePath: { type: String, required: true},
   // Title of MIDI track
   title: { type: String, required: true },
+  // Duration of MIDI track
+  duration: {type: Number, required: true},
   // Indicator whether this track is public or private
   isPublic: { type: Boolean, default: true },
   // Time created of this MIDI track
   editedTime: { type: Date, default: Date.now }
 }, { versionKey: false });
-
-var INVALID_UPDATE_FIELDS = [
-  'refId',
-  'ownerId',
-  'userId',
-  'trackId',
-  'filePath'
-];
-
-/** 
- * Private methods
- */
-function _checkValidFieldForUpdate (fieldName) {
-  return INVALID_UPDATE_FIELDS.indexOf(fieldName) == -1;
-}
 
 /**
  * Methods
@@ -75,24 +63,13 @@ MidiSchema.statics = {
    */
   deleteMidi: function (midiId) {
     var deferred = q.defer();
-    this.findByIdAndRemove(midiId, function (err) {
+    this.remove({ 
+      $or: [{'_id': new ObjectId(midiId)}, {'refId': midiId}]
+    }, function (err) {
       if (err) {
         deferred.reject(err);
       } else {
         deferred.resolve("Delete the track ID successfully");
-      }
-    });
-
-    return deferred.promise;
-  },
-
-  deleteMidiRefs: function (midiId) {
-    var deferred = q.defer();
-    this.remove({refId: midiId}, function (err) {
-      if (err) {
-        deferred.reject(err);
-      } else {
-        deferred.resolve("Delete all references of track ID successfully");
       }
     });
 
@@ -106,6 +83,20 @@ MidiSchema.statics = {
         deferred.reject(err);
       } else {
         deferred.resolve(midi);
+      }
+    });
+
+    return deferred.promise;
+  },
+
+  findMidiByRefForUser: function (midiId, userId) {
+    var deferred = q.defer();
+    var conditions = {refId: midiId, userId: userId};
+    this.findOne(conditions, function (err, midis) {
+      if (err) {
+        deferred.reject(err);
+      } else {
+        deferred.resolve(midis);
       }
     });
 
