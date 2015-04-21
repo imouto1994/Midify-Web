@@ -273,7 +273,7 @@ gulp.task('usemin', ['inject'], function () {
 
 gulp.task('cssmin', function () {
   return gulp.src('dist/client/app.css')
-    .pipe($.minifyCss())
+    .pipe($.minifyCss({processImport: false}))
     .pipe(gulp.dest('dist/client/'));
 });
 
@@ -327,7 +327,6 @@ gulp.task('build', function (cb) {
     ['clean:dist', 'sass'],
     ['usemin', 'copy:dist'],
     ['replace', 'scripts', 'cssmin'],
-    'rev',
     'clean:finish',
     cb);
 });
