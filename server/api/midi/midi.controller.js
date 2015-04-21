@@ -37,7 +37,6 @@ exports.convertMidi = function (req, res) {
           title: req.body.title,
           isPublic: req.body.isPublic
         };
-        Log.logJSONInfo(newMidi);
         return Midi.createMidi(newMidi);
       },
       function (err) {
@@ -46,7 +45,6 @@ exports.convertMidi = function (req, res) {
     ).then(
       function (midi) {
         Log.logSuccess("MIDI file has been created successfully!");
-        Log.logJSONInfo(midi);
         newMidi = midi;
         Log.logInfo("Create corresponding activity...");
         return ActivityController.createActivityCreate(req.user.userId, req.body.title);
@@ -212,7 +210,6 @@ exports.forkMidi = function (req, res) {
     ).then(
       function (midi) {
         Log.logSuccess("MIDI file has been created successfully!");
-        Log.logJSONInfo(midi);
         newMidi = midi;
         return ActivityController.createActivityFork(req.user.userId, 
                                                 refMidi.ownerId, 
@@ -340,7 +337,6 @@ exports.getMidiFromUser = function (req, res) {
     }
   ).then(
     function (midis) {
-      Log.logJSONInfo(midis);
       res.status(200).json(midis);
     },
     function (err) {
