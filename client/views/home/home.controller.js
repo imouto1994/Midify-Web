@@ -2,7 +2,7 @@
 
 var HomeController = function ($scope, $routeParams, Auth) {
   $scope.signIn = function (ev) {
-    Auth.login();
+    $scope.Auth.login();
   }
 }
 

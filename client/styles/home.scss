@@ -2,8 +2,12 @@
   color: #fff;
   text-align: center;
   height: 100%;
-  background: url('../../assets/images/bg.jpg');
+  background: url('../../assets/images/bg.jpg') no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
   background-size: cover;
+  overflow: hidden;
   
   .home-title {
     @extend .font-quicksand;
@@ -22,5 +26,7 @@
   .md-button {
     min-width: 13em;
     line-height: 2.5em;
+    height: 3.25em;
+    font-size: 1em;
   }
 }

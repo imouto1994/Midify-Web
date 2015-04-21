@@ -4,7 +4,7 @@
     <img src="../../assets/images/logo.png" class="nav-logo">
     <span flex></span>
     <!-- Log In Button (if not logged in) -->
-    <md-button ng-click="signIn($event)" ng-if="!Auth.isLogged()">
+    <md-button class="md-raised" ng-click="signIn($event)" ng-if="!Auth.isLogged()">
       Log In With Facebook
     </md-button>
     <!-- User Profile Picture (if logged in) -->

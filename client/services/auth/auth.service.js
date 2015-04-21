@@ -97,24 +97,7 @@ var AuthService = function ($q, $http, $cookieStore, $location, Facebook) {
         token: $cookieStore.get('token'),
         userId: $cookieStore.get('userId')
       })
-    } else {
-      Facebook.getLoginStatus(function (response) {
-        if (response.status == 'connected') {
-          console.log('User is currently logged in and successfully retrieve user authentication info');
-          var user = {
-            token: response.authResponse.accessToken,
-            userId: response.authResponse.userID
-          };
-          $cookieStore.put("token", user.token);
-          $cookieStore.put("userId", user.userId);
-          deferred.resolve(user);
-        } else if (response.status == 'not authorized') {
-          console.log('User has not been authorized for the application');
-        } else {
-          console.log('User has not been logged into Facebook');
-        }
-      });
-    }
+    } 
     
     return deferred.promise;
   }
