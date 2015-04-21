@@ -42,8 +42,8 @@ var AuthService = function ($q, $http, $cookieStore, $location, Facebook) {
         $http.post('/api/users', user).then(
           function (data, status) {
             console.log(data.status + ': User token has been registered successfully');
-            $location.path('/personal/' + user.userId);
             self.fetchUserInfo();
+            $location.path('/personal/' + user.userId);
           }
         );
       }
@@ -112,8 +112,8 @@ var AuthService = function ($q, $http, $cookieStore, $location, Facebook) {
       .success(
         function (data) {
           console.log("Successfully fetch user information");
+          $cookieStore.put("userName", data.name);
           _user = data;
-          $cookieStore.put("userName", _user.name);
           console.log(_user);
         }
       ).error(

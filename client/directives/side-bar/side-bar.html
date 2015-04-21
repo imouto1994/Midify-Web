@@ -1,5 +1,6 @@
 <md-sidenav 
-  class="md-sidenav-left md-whiteframe-z2 side-bar" ng-if="Auth.isLogged()" ng-init="getFriends()"
+  class="md-sidenav-left md-whiteframe-z2 side-bar" ng-if="Auth.isLogged()" 
+  ng-init="refreshList()"
   md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
   <md-list role="list" class="md-default-theme" aria-hidden="false">
     <md-subheader class="md-no-sticky">ME</md-subheader>
