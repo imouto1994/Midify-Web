@@ -200,7 +200,7 @@ gulp.task('e2e', ['serve'], function () {
 /**
  * Launch server
  */
-gulp.task('serve', function () {
+gulp.task('serve', ['watch'], function () {
   return $.nodemon({
       script: 'server/server.js',
       ext: 'js',

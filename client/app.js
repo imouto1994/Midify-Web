@@ -44,9 +44,15 @@ app.config(function ($mdThemingProvider) {
     'hue-1': 'A200',
     'hue-2': 'A400',
     'hue-3': '200'
-  })
+  });
 
   // Accent Scheme
+  defaultTheme.accentPalette('blue', {
+    'default': '500',
+    'hue-1': '700',
+    'hue-2': '800',
+    'hue-3': '900'
+  });
 
   // Warn Scheme 
   

@@ -28,7 +28,15 @@
   }
 
   .md-button {
-    min-width: 6em;
+    width: 7em;
     @include fadeLeftAnimate(0.3s);
+
+    &:before {
+      position: relative;
+      font-size: 1.25em;
+      margin-right: 0.25em;
+      font-family: FontAwesome;
+      content: '\f09a';
+    }
   }
 }
