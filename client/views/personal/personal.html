@@ -1,5 +1,17 @@
 <div class="personal-content">
   <md-list>
-
+    <md-list-item class="md-3-line md-with-secondary" ng-repeat="midi in midis">
+      <img ng-src="http://graph.facebook.com/{{midi.ownerId}}/picture?type=large" class="md-avatar"/>
+      <div class="md-list-item-text">
+        <h3>{{midi.title}}</h3>
+        <h4>{{durationFormat(midi.duration)}}</h4>
+        <p>Last edited on {{dateFormat(midi.editedTime)}}</p>
+      </div>
+      <md-button class="md-raised md-primary md-secondary" 
+          ng-href="/api/midi/download?fileId={{midi._id}}" target="_self">
+        Download
+      </md-button>
+      <md-divider></md-divider>
+    </md-list-item>
   </md-list>
 </div>

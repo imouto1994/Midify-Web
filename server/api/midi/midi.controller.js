@@ -77,7 +77,6 @@ exports.convertMidi = function (req, res) {
  */
 exports.downloadMidi = function (req, res) {
   var fileId = req.param('fileId');
-  var userId = req.user.userId;
   if (!fileId) {
     var err = 'Failed to receive the ID of MIDI track';
     _handleError(res, err);
@@ -119,7 +118,7 @@ exports.downloadMidiForRemotePlay = function (req, res) {
           _handleError(res, err);
         } else {
           downloadMidi = midi;
-          return ActivityController.createActivityPlay(req.user.userId, 
+          return ActivityController.createActivityPlay(userId, 
                                                         midi.ownerId, 
                                                         midi.title);
         }

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('Midify')
-  .directive('sideBar', function (FacebookApi, $cookieStore) {
+  .directive('sideBar', function (FacebookApi, $cookieStore, $location) {
     return {
       restrict: 'E',
       replace: true,
@@ -24,6 +24,10 @@ angular.module('Midify')
             }
           )
         };
+
+        $scope.onClick = function(ev, userId) {
+          $location.path('/personal/' + userId);
+        }
       }
     };
   });

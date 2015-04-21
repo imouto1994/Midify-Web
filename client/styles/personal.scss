@@ -1,4 +1,11 @@
 .personal-content {
-  background: #BFBFBF;
   height: 100%;
+
+  & md-list-item {
+    padding-left: 1em;
+
+    & .md-secondary {
+      top: 18px;
+    }
+  }
 }
