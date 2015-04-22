@@ -8,7 +8,8 @@
         <p>Last edited on {{dateFormat(midi.editedTime)}}</p>
       </div>
       <md-button class="md-raised md-primary md-secondary" 
-          ng-href="/api/midi/download?fileId={{midi._id}}" target="_self">
+          ng-href="/api/midi/download?fileId={{midi._id}}" target="_self" 
+          ng-if="userId == midi.userId">
         Download
       </md-button>
       <md-divider></md-divider>

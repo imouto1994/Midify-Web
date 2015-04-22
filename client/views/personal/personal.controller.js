@@ -1,7 +1,8 @@
 'use strict';
 
-var PersonalController = function ($scope, MidifyApi, midis) {
+var PersonalController = function ($scope, MidifyApi, Auth, midis) {
   $scope.midis = midis;
+  $scope.userId = Auth.getUser().id;
 
   $scope.dateFormat = function (time) {
     var monthNames = [
