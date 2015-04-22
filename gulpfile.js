@@ -94,9 +94,7 @@ gulp.task('inject', ['sass'], function () {
  * Reinject files
  */
 gulp.task('watch', ['inject'], function () {
-
-  $.livereload.listen();
-
+  
   gulp.watch('bower.json', function () {
     gulp.src('client/index.html')
       .pipe($.inject(gulp.src(bowerFiles(), { read: false }), {
@@ -106,15 +104,11 @@ gulp.task('watch', ['inject'], function () {
       .pipe(gulp.dest('client'));
   });
 
-  gulp.watch(['client/index.html', 'client/app.js'])
-    .on('change', $.livereload.changed);
-
   $.watch(['client/styles/**/*.scss', 'client/views/**/*.scss'], function () {
     gulp.src('client/styles/app.scss')
       .pipe($.plumber())
       .pipe($.sass())
-      .pipe(gulp.dest('client/styles/css'))
-      .pipe($.livereload());
+      .pipe(gulp.dest('client/styles/css'));
   });
 
   $.watch([
